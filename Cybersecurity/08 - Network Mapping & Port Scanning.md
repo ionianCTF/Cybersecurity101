@@ -164,6 +164,6 @@ nmap -6 <target>
 
 Το Nmap διαθέτει ένα ενσωματωμένο GUI (Graphical User Interface), μαζί με άλλα εργαλεία. Το GUI μπορεί να είναι χρήσιμο για την οπτικοποίηση δικτύων και την περιήγηση σε ανοιχτές θύρες ανάμεσα σε διαφορετικούς hosts. Το GUI μοιάζει με την παρακάτω εικόνα:
 
-![Zenmap](img_zenmap.png)
+![Zenmap](https://www.w3schools.com/cybersecurity/img_zenmap.png)
 
 ---
