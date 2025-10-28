@@ -1,10 +1,5 @@
 # Cyber Security — Network Mapping & Port Scanning
 
-<div class="w3-clear nextprev">
-  <a class="w3-left w3-btn" href="cybersecurity_web_applications.php">&#10094; Previous</a>
-  <a class="w3-right w3-btn" href="cybersecurity_network_attacks.php">Next &#10095;</a>
-</div>
-
 ---
 
 Εάν πρόκειται να υπερασπιστούμε, πρώτα πρέπει να ξέρουμε τι πρέπει να υπερασπιστούμε. Η διαχείριση περιουσιακών στοιχείων (Asset Management) βασίζεται συχνά στο Network Mapping για να εντοπίσει ποια συστήματα είναι ενεργά σε ένα δίκτυο.
@@ -23,7 +18,7 @@
 
 Ένας τρόπος για να εντοπίσουμε hosts που είναι ενεργοί στο δίκτυο είναι να στείλουμε ένα ping, δηλαδή ένα ICMP Echo Request, σε όλες τις διευθύνσεις IP του δικτύου. Αυτό αναφέρεται συχνά ως **Ping Sweep**.
 
-![Ping Sweep](img_pingsweep.svg)
+![Ping Sweep](https://www.w3schools.com/cybersecurity/img_pingsweep.svg)
 
 Αυτή η προσέγγιση δεν είναι πολύ αποτελεσματική για την ανίχνευση περιουσιακών στοιχείων. Είναι πιθανό ότι τα συστήματα στο δίκτυο θα αγνοήσουν εισερχόμενα pings, ίσως λόγω ενός firewall που τα μπλοκάρει ή λόγω ενός host-based firewall. Ένα host-based firewall είναι απλά ένα firewall που υλοποιείται στο ίδιο το σύστημα αντί για το δίκτυο.
 
@@ -49,7 +44,7 @@
 
 Προσθέτουμε δύο `-v` για να ζητήσουμε verbose έξοδο από το Nmap — κάνει τη σάρωση πιο "διασκεδαστική" όσο τρέχει.
 
-![Nmap Scan](img_nmap-scan.png)
+![Nmap Scan](https://www.w3schools.com/cybersecurity/img_nmap-scan.png)
 
 ---
 
@@ -88,7 +83,7 @@ Alice: 192.168.0.4 is me and my MAC Address is: CC:DD:EE:12:34:56
 
 Το TCP είναι εύκολο πρωτόκολλο για σάρωση επειδή το πρότυπο TCP ορίζει ότι τα συστήματα πρέπει να απαντούν με SYN/ACK όταν λαμβάνουν ένα SYN. Μπορούμε να στείλουμε ένα SYN πακέτο σε όλες τις 65.536 θύρες και να καταγράψουμε όλα τα SYN/ACK που επιστρέφονται — τα οποία υποδεικνύουν ποιες θύρες είναι ανοιχτές. Όταν δεν λαμβάνεται απάντηση, μπορούμε να υποθέσουμε ότι η θύρα είναι κλειστή ή φιλτραρισμένη (π.χ. από firewall).
 
-![TCP Scan](img_tcpscan.svg)
+![TCP Scan](https://www.w3schools.com/cybersecurity/img_tcpscan.svg)
 
 Με το SYN/ACK στην πόρτα 445 έχουμε εντοπίσει ότι η θύρα είναι ανοιχτή.
 
@@ -100,7 +95,7 @@ Alice: 192.168.0.4 is me and my MAC Address is: CC:DD:EE:12:34:56
 
 Με τόσες πολλές πιθανές θύρες ανοιχτές και διαφορετικές υπηρεσίες που απαντούν μόνο στο σωστό είδος δεδομένων, γίνεται χρονοβόρο και δύσκολο να σαρώσουμε όλες τις θύρες σε λογικό χρόνο.
 
-![UDP Scan](img_udpscan.svg)
+![UDP Scan](https://www.w3schools.com/cybersecurity/img_udpscan.svg)
 
 Η Eve πρέπει να μιλήσει το σωστό πρωτόκολλο και να εξασφαλίσει ότι τα πακέτα φτάνουν στον προορισμό (π.χ. χωρίς απώλεια πακέτων). Διαφορετικά η Eve μπορεί να μην ανακαλύψει ότι η θύρα είναι ανοιχτή.
 
